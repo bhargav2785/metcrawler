@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#######################################
-# handle multiple sites as in www.google.com
-#######################################
-
 DEPENDENCIES_RESOLVED=true;
 
 function check_dependency(){
@@ -136,7 +132,13 @@ if [ 0 -eq ${RESULT_LENGTH} ]; then
 	printUsage
 	exit
 elif [ ${RESULT_LENGTH} -gt 1 ]; then
-	consolePrint "Site '${SITE}' has multiple matches"
+	consolePrint "Site '${SITE}' has multiple matches as below. Please copy one of them and try again"
+	consolePrint
+	LINKS=$( echo ${RESULTS} | jq -r '.[] .value' )
+	for link in ${LINKS}; do
+		consolePrint ${link}
+	done
+	consolePrint
 	exit
 else
 	consolePrint "Site '${SITE}' found"

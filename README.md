@@ -21,7 +21,7 @@ There is no special requirements expect it needs following command-line tools in
 * ``` csvjson ```
 
 If you haven't installed them or not sure about them don't worry. The script will check for the dependencies and let you know sources where you can download/install them.
-  
+
 ## How to use it?
 It is really simple shell script and you can invoke it with two arguments.
 
