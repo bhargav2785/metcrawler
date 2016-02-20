@@ -4,10 +4,10 @@
 MetCrawler is a web performance metrics crawler for a website. It uses the data hosted by http://httparchive.org and http://www.webpagetest.org/.
  
 ## Where to use this tool?
-MetCrawler downloads performance data of a given website from http://httparchive.org. HttpArchive project has these data available from late 2010 or early 2011 for most of the sites. If the site is available in http://httparchive.org project then running this script will download two files 1) metrics.csv and 2) metrics.json. You can use whichever format you prefer. You can feed this data to some charts and see how did the website performance metrics evolved over the time. If you are doing an audit or an analysis of your website and trying to figure out performance gain/lose, this tool could be useful.
+MetCrawler downloads performance data of a given website from http://httparchive.org. HttpArchive project has these data available from late 2010 or early 2011 for most of the sites. If the site is available in http://httparchive.org project then running this script will download two files 1) metrics.csv and 2) metrics.json. You can use whichever format you prefer. You can feed this data to some charts and see how did the website performance metrics evolved over the time. If you are doing an audit or an analysis of your website and trying to figure out performance gain/loss, this tool could be useful.
 
 ## What is in the metric file?
-Both metrics.csv and metrics.json contains the same data but in different format for various projects. The file contains given websites web performance data. Some of the popular metrics are TTFB, firstPaintTime, loadTime, documentCompleteTime, speedIndex, connectionCount, js_size, css_size etc.
+Both metrics.csv and metrics.json contains the same data but in different format for various projects. The file contains given website's web performance data. Some of the popular metrics are TTFB, firstPaintTime, loadTime, documentCompleteTime, speedIndex, connectionCount, js_size, css_size etc.
 
 ## How does it work?
 MetCrawler queries HttpArchive project and gets the dates on which the tests(webpagetests) were run on HttpArchive project. After that, the tool queries WebPageTest and gets the performance data for each run found from the HttpArchive.
@@ -25,8 +25,8 @@ If you haven't installed them or not sure about them don't worry. The script wil
 ## How to use it?
 It is really simple shell script and you can invoke it with two arguments.
 
-- website name (name of the website you need metrics for)
-- type (mobile/desktop)
+- website name (name of the website you need metrics for. Required argument)
+- type (mobile/desktop. Optional argument, default is desktop)
 
 Below are some of the examples. If anything is wrong, the script will guide you step by step on what is missing.
 
