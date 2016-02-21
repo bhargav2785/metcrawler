@@ -108,7 +108,6 @@ for run in ${RUNS}; do
 	TEST_IDS+=(${WP_URL})
 
 	consolePrint "${run} => ${WP_URL}"
-	break
 done
 
 printHeader "Collecting metrics(avg,std_dev,med) for each test runs"
