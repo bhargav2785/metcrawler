@@ -1,59 +1,9 @@
 #!/bin/bash
 
-DEPENDENCIES_RESOLVED=true;
+source functions.sh
 
-function check_dependency(){
-	if ! which $1 > /dev/null; then
-		echo "Please install $1 or make sure it is in your path";
-		echo "See $2";
-		echo "";
-		DEPENDENCIES_RESOLVED=false;
-	fi
-}
-
-urlencode() {
-	local string="${1}"
-	local strlen=${#string}
-	local encoded=""
-
-	for (( pos=0 ; pos<strlen ; pos++ )); do
-		c=${string:$pos:1}
-		case "$c" in
-			[-_.~a-zA-Z0-9] ) o="${c}" ;;
-			* )               printf -v o '%%%02x' "'$c"
-		esac
-		encoded+="${o}"
-	done
-
-	echo "${encoded}"
-}
-
-printHeader(){
-	consolePrint ""
-	consolePrint "##########################################################"
-	consolePrint "$1"
-	consolePrint "##########################################################"
-	consolePrint ""
-}
-
-printUsage(){
-	consolePrint "Usage : ./metcrawler.sh http://www.example.com [mobile|desktop]"
-	consolePrint "        1. Do not include slash at the end"
-	consolePrint "        2. Make sure your site begins with either http:// or https://"
-	consolePrint "        3. Try including/excluding www"
-}
-
-printError(){
-	consolePrint "ERROR : $1."
-}
-
-printNotice(){
-	consolePrint "NOTICE : $1."
-}
-
-consolePrint(){
-	echo `date '+%H:%M:%S'` " $1"
-}
+OUTPUT_CSV_FILE_NAME="metrics.csv"
+OUTPUT_JSON_FILE_NAME="metrics.json"
 
 processRun(){
 	JSON_FULL="$1"
@@ -72,7 +22,7 @@ processRun(){
 			VALUES="${VALUES}${METRIC_VALUE},";
 		done
 
-		echo ${metricName},${testId},${completed},${VALUES} >> metrics.csv;
+		echo ${metricName},${testId},${completed},${VALUES} >> ${OUTPUT_CSV_FILE_NAME};
 	else
 		printNotice "No ${metricName}.firstView data found for test_id: ${test} ... skipping"
 	fi
@@ -91,8 +41,8 @@ if [ ${DEPENDENCIES_RESOLVED} != true ]; then
 fi
 
 # remove file if exist
-rm -f metrics.csv
-rm -f metrics.json
+rm -f ${OUTPUT_CSV_FILE_NAME}
+rm -f ${OUTPUT_JSON_FILE_NAME}
 
 if [ -n "$1" ]; then
 	SITE="$1";
@@ -158,12 +108,13 @@ for run in ${RUNS}; do
 	TEST_IDS+=(${WP_URL})
 
 	consolePrint "${run} => ${WP_URL}"
+	break
 done
 
 printHeader "Collecting metrics(avg,std_dev,med) for each test runs"
 METRICS="TTFB adult_site aft avgRun bytesIn bytesInDoc bytesOut bytesOutDoc cached connections date docCPUms docCPUpct docTime domContentLoadedEventEnd domContentLoadedEventStart domElements domTime effectiveBps effectiveBpsDoc firstPaint fixed_viewport fullyLoaded fullyLoadedCPUms fullyLoadedCPUpct gzip_savings gzip_total image_savings image_total isResponsive lastVisualChange loadEventEnd loadEventStart loadTime minify_savings minify_total optimization_checked pageSpeedVersion render requestsDoc requestsFull responses_200 responses_404 responses_other result run score_cache score_cdn score_combine score_compress score_cookies score_etags score_gzip score_keep-alive score_minify score_progressive_jpeg server_count server_rtt titleTime";
 
-echo "measure,id,date,"${METRICS} | tr ' ' ',' >> metrics.csv
+echo "measure,id,date,"${METRICS} | tr ' ' ',' >> ${OUTPUT_CSV_FILE_NAME}
 
 for test in "${TEST_IDS[@]}"; do
 	consolePrint "processing ${test}"
@@ -182,6 +133,6 @@ for test in "${TEST_IDS[@]}"; do
 	processRun "${JSON_FULL}" "median" "${METRICS}" "${test}" "${COMPLETED}"
 done
 
-printHeader "Creating metrics.json"
-csvjson -i 4 metrics.csv > metrics.json
+printHeader "Creating ${OUTPUT_JSON_FILE_NAME}"
+csvjson -i 4 ${OUTPUT_CSV_FILE_NAME} > ${OUTPUT_JSON_FILE_NAME}
 consolePrint "Finished"
