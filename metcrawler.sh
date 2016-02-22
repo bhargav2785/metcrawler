@@ -72,7 +72,7 @@ if [ -n "$2" ]; then
 	fi
 fi
 
-printHeader "Quering httparchive.org for ${SITE}"
+printHeader "Quering httparchive.org for ${SITE} ("${RUN_TYPE}")"
 
 RESULTS=$( curl -s "http://${DOMAIN_PREFIX}httparchive.org/findurl.php?term=${SITE}/" );
 RESULT_LENGTH=$( echo ${RESULTS} | jq '. | length' )
@@ -94,7 +94,7 @@ else
 	consolePrint "Site '${SITE}' found"
 fi
 
-printHeader "Quering httparchive.org for available runs"
+printHeader "Quering httparchive.org for available '"${RUN_TYPE}"' runs"
 PAGE_ID=$( echo ${RESULTS} | jq -r '.[0]["data-pageid"]' )
 RUNS=$( curl -s "http://${DOMAIN_PREFIX}httparchive.org/viewsite.php?pageid=${PAGE_ID}" | pup 'select json{}' | jq '.[0].children[] .text' | tr -d '"' | tr ' ' ',' )
 

@@ -39,5 +39,8 @@ Below are some of the examples. If anything is wrong, the script will guide you 
 
 The tool produces human readable debug messages so you will know what's exactly happening while running the script.
 
+## Example
+The `example` folder contains two sample files created by this tool 1) metrics.csv and 2) metrics.json for http://www.google.com. This metrics.json file can directly feed into the UI/chart tool which makes it much easier to understand and visualize your site's performance over the time.
+
 ## Change Log
 2016.02.19 Initial version
